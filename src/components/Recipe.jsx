@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { User } from "./User.jsx";
+import TextWithLineBreaks from "./TextWithLineBreaks.jsx";
 
 export function Recipe({ name, ingredients, steps, author, image }) {
   return (
@@ -16,11 +17,11 @@ export function Recipe({ name, ingredients, steps, author, image }) {
       </div>
       <div>
         <h4>Ingredients</h4>
-        {ingredients}
+        <TextWithLineBreaks text={ingredients} />
       </div>
       <div>
         <h4>Steps</h4>
-        {steps}
+        <TextWithLineBreaks text={steps} />
       </div>
     </article>
   );

@@ -1,20 +1,20 @@
 version: "3.9"
 services:
-  blog-database:
+  recipe-database:
     image: mongo
     ports:
       - "27017:27017"
-  blog-backend:
+  recipe-backend:
     build: backend/
     environment:
       - PORT=3001
-      - DATABASE_URL=mongodb://blog-database:27017/blog
+      - DATABASE_URL=mongodb://recipe-database:27017/recipes
       - JWT_SECRET=dev-secret
     ports:
       - "3001:3001"
     depends_on:
-      - blog-database
-  blog-frontend:
+      - recipe-database
+  recipe-frontend:
     build:
       context: .
       args:
@@ -22,4 +22,4 @@ services:
     ports:
       - "3000:80"
     depends_on:
-      - blog-backend
+      - recipe-backend
