@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-export function PostSorting({
+export function RecipeSorting({
   fields = [],
   value,
   onChange,
@@ -37,7 +37,7 @@ export function PostSorting({
   );
 }
 
-PostSorting.propTypes = {
+RecipeSorting.propTypes = {
   fields: PropTypes.arrayOf(PropTypes.string).isRequired,
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
