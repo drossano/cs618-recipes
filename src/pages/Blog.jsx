@@ -6,6 +6,7 @@ import { RecipeSorting } from "../components/RecipeSorting.jsx";
 import { getRecipes } from "../api/recipes.js";
 import { useState } from "react";
 import { Header } from "../components/Header.jsx";
+import { Helmet } from "react-helmet-async";
 import "./Blog.css";
 
 export function Blog() {
@@ -19,6 +20,9 @@ export function Blog() {
   const recipes = recipesQuery.data ?? [];
   return (
     <div style={{ padding: 8 }}>
+      <Helmet>
+        <title>Cook Book</title>
+      </Helmet>
       <Header />
       <br />
       <hr />
