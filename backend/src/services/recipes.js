@@ -61,7 +61,7 @@ export async function likeRecipe(userId, RecipeId) {
 export async function unlikeRecipe(userId, RecipeId) {
   const recipe = await getRecipeById(RecipeId)
   if (!recipe.likes.includes(userId)) {
-    throw new Error('User already likes this recipe')
+    throw new Error("User doesn't likes this recipe")
   } else {
     return await Recipe.findByIdAndUpdate(
       { _id: RecipeId },

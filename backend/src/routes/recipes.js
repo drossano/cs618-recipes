@@ -5,6 +5,8 @@ import {
   getRecipeById,
   updateRecipe,
   deleteRecipe,
+  likeRecipe,
+  unlikeRecipe,
 } from '../services/recipes.js'
 
 import { requireAuth } from '../middleware/jwt.js'
@@ -60,6 +62,24 @@ export function recipesRoutes(app) {
       return res.status(204).end()
     } catch (err) {
       console.error('error deleting recipe', err)
+      return res.status(500).end()
+    }
+  })
+  app.patch('/api/v1/recipes/like/:id', requireAuth, async (req, res) => {
+    try {
+      await likeRecipe(req.auth.sub, req.params.id)
+      return res.status(204).end()
+    } catch (error) {
+      console.error('error liking recipe', error)
+      return res.status(500).end()
+    }
+  })
+  app.patch('/api/v1/recipes/unlike/:id', requireAuth, async (req, res) => {
+    try {
+      await unlikeRecipe(req.auth.sub, req.params.id)
+      return res.status(204).end()
+    } catch (error) {
+      console.error('error unliking recipe', error)
       return res.status(500).end()
     }
   })
