@@ -11,12 +11,16 @@ export function Recipe({
   author,
   image,
   _id,
+  likes,
   fullRecipe = false,
 }) {
   return (
     <article>
       {fullRecipe ? (
-        <h3>{name}</h3>
+        <div>
+          <h3>{name}</h3>
+          <div>Likes: {likes.length}</div>
+        </div>
       ) : (
         <div>
           <Link to={`/recipes/${_id}/${slug(name)}`}>
@@ -58,5 +62,6 @@ Recipe.propTypes = {
   author: PropTypes.string,
   image: PropTypes.string,
   _id: PropTypes.string.isRequired,
+  likes: PropTypes.array,
   fullRecipe: PropTypes.bool,
 };
