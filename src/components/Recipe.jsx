@@ -1,28 +1,52 @@
 import PropTypes from "prop-types";
 import { User } from "./User.jsx";
-import TextToList from "./TextToList.jsx";
+import { TextToList } from "./TextToList.jsx";
+import { Link } from "react-router-dom";
+import slug from "slug";
 
-export function Recipe({ name, ingredients, steps, author, image }) {
+export function Recipe({
+  name,
+  ingredients,
+  steps,
+  author,
+  image,
+  _id,
+  fullRecipe = false,
+}) {
   return (
     <article>
-      <h3>{name}</h3>
+      {fullRecipe ? (
+        <h3>{name}</h3>
+      ) : (
+        <div>
+          <Link to={`/recipes/${_id}/${slug(name)}`}>
+            <h3>{name}</h3>
+          </Link>
+          <img src={image} alt="" />
+        </div>
+      )}
+      {fullRecipe && (
+        <div>
+          <div>
+            <img src={image} alt="" />
+          </div>
+          <div>
+            <h4>Ingredients</h4>
+            <TextToList text={ingredients} ordered={false} />
+          </div>
+          <div>
+            <h4>Steps</h4>
+            <TextToList text={steps} ordered={true} />
+          </div>
+        </div>
+      )}
+
       {author && (
         <em>
-          <br />
+          {fullRecipe && <br />}
           Written by <User id={author} />
         </em>
       )}
-      <div>
-        <img src={image} alt="" />
-      </div>
-      <div>
-        <h4>Ingredients</h4>
-        <TextToList text={ingredients} listType="ul" />
-      </div>
-      <div>
-        <h4>Steps</h4>
-        <TextToList text={steps} listType="ol" />
-      </div>
     </article>
   );
 }
@@ -33,4 +57,6 @@ Recipe.propTypes = {
   steps: PropTypes.string,
   author: PropTypes.string,
   image: PropTypes.string,
+  _id: PropTypes.string.isRequired,
+  fullRecipe: PropTypes.bool,
 };

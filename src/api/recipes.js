@@ -18,3 +18,10 @@ export const createRecipe = async (token, post) => {
   });
   return await res.json();
 };
+
+export const getRecipeById = async (recipeId) => {
+  const res = await fetch(
+    `${import.meta.env.VITE_BACKEND_URL}/recipes/${recipeId}`,
+  );
+  return await res.json();
+};
