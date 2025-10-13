@@ -320,7 +320,7 @@ describe('unliking posts', () => {
     try {
       await unlikeRecipe(testUser._id, createdSampleRecipes[0]._id)
     } catch (err) {
-      expect(err.message).toContain('User already likes this recipe')
+      expect(err.message).toContain("User doesn't likes this recipe")
     }
   })
 })
