@@ -296,4 +296,13 @@ describe('liking posts', () => {
     const likedRecipe = await Recipe.findById(createdSampleRecipes[0]._id)
     expect(likedRecipe.likes.length).toEqual(1)
   })
+  test('should not let a user like a recipe more than once', async () => {
+    try {
+      await likeRecipe(testUser._id, createdSampleRecipes[0]._id)
+      await likeRecipe(testUser._id, createdSampleRecipes[0]._id)
+    } catch (err) {
+      //expect(err).toBeInstanceOf(mongoose.Error.ValidationError)
+      expect(err.message).toContain('User already likes this recipe')
+    }
+  })
 })
