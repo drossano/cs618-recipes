@@ -7,6 +7,7 @@ import {
   getRecipeById,
   updateRecipe,
   deleteRecipe,
+  likeRecipe,
 } from '../services/recipes.js'
 import { Recipe as Recipe } from '../db/models/recipe.js'
 import { createUser } from '../services/users.js'
@@ -285,5 +286,14 @@ describe('deleting recipes', () => {
       createdSampleRecipes[0]._id,
     )
     expect(result.deletedCount).toEqual(0)
+  })
+})
+
+describe('liking posts', () => {
+  test('should like a recipe if user doesnt like it', async () => {
+    await likeRecipe(testUser._id, createdSampleRecipes[0]._id)
+
+    const likedRecipe = await Recipe.findById(createdSampleRecipes[0]._id)
+    expect(likedRecipe.likes.length).toEqual(1)
   })
 })

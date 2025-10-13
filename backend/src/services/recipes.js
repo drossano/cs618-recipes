@@ -45,3 +45,10 @@ export async function updateRecipe(
 export async function deleteRecipe(userId, RecipeId) {
   return await Recipe.deleteOne({ _id: RecipeId, author: userId })
 }
+
+export async function likeRecipe(userId, RecipeId) {
+  return await Recipe.findByIdAndUpdate(
+    { _id: RecipeId },
+    { $push: { likes: [userId] } },
+  )
+}
