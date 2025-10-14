@@ -25,3 +25,17 @@ export const getRecipeById = async (recipeId) => {
   );
   return await res.json();
 };
+
+export const likeRecipe = async (token, recipeId) => {
+  const res = await fetch(
+    `${import.meta.env.VITE_BACKEND_URL}/recipes/like/${recipeId}`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+  return await res.json();
+};

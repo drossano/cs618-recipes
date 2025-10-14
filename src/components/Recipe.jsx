@@ -20,14 +20,14 @@ export function Recipe({
       {fullRecipe ? (
         <div>
           <h3>{name}</h3>
-          <Likes likes={likes} />
+          <Likes likes={likes} recipeId={_id} />
         </div>
       ) : (
         <div>
           <Link to={`/recipes/${_id}/${slug(name)}`}>
             <h3>{name}</h3>
           </Link>
-          <Likes likes={likes} />
+          <Likes likes={likes} recipeId={_id} />
 
           <img src={image} alt="" />
         </div>
