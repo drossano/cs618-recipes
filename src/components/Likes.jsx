@@ -4,52 +4,64 @@ import PropTypes from "prop-types";
 import { User } from "./User.jsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { likeRecipe, unlikeRecipe } from "../api/recipes.js";
+import { useState } from "react";
 
 export function Likes({ likes, recipeId }) {
   const [token] = useAuth();
-  const queryClient = useQueryClient();
-  const likeRecipeMutation = useMutation({
-    mutationFn: () => likeRecipe(token, recipeId),
-    onSuccess: () => queryClient.invalidateQueries(["recipes"]),
-  });
-  const handleLike = (e) => {
-    e.preventDefault();
-    likeRecipeMutation.mutate();
-  };
-  const unlikeRecipeMutation = useMutation({
-    mutationFn: () => unlikeRecipe(token, recipeId),
-    onSuccess: () => queryClient.invalidateQueries(["recipes"]),
-  });
-  const handleUnlike = (e) => {
-    e.preventDefault();
-    unlikeRecipeMutation.mutate();
-  };
+  const [numLikes, setLikes] = useState(likes.length);
   if (token) {
     const { sub } = jwtDecode(token);
 
     if (likes.includes(sub)) {
+      const [setLiked] = useState(true);
+      // put liked in useState for now
+      const queryClient = useQueryClient();
+      const unlikeRecipeMutation = useMutation({
+        mutationFn: () => unlikeRecipe(token, recipeId),
+        onSuccess: () => queryClient.invalidateQueries(["recipe"]),
+      });
+      const handleUnlike = (e) => {
+        e.preventDefault();
+        setLiked(false);
+        setLikes(likes.length - 1);
+        unlikeRecipeMutation.mutate();
+      };
+
       return (
         <div>
           <div>
             <User id={sub} />
           </div>
-          <button onClick={handleUnlike}>Unlike</button> {likes.length}
+          <button onClick={handleUnlike}>Unlike</button> {numLikes}
         </div>
       );
     } else {
+      const [setLiked] = useState(false);
+      // put liked in useState for now
+      const queryClient = useQueryClient();
+      const likeRecipeMutation = useMutation({
+        mutationFn: () => likeRecipe(token, recipeId),
+        onSuccess: () => queryClient.invalidateQueries(["recipe"]),
+      });
+      const handleLike = (e) => {
+        e.preventDefault();
+        setLiked(true);
+        setLikes(likes.length + 1);
+        likeRecipeMutation.mutate();
+      };
       return (
         <div>
           <div>
             <User id={sub} />
           </div>
-          <button onClick={handleLike}>Like</button> {likes.length}
+          <button onClick={handleLike}>Like</button> {numLikes}
         </div>
       );
     }
   }
   return (
     <div>
-      <div>Likes: {likes.length}</div>
+      <div>Likes: {numLikes}</div>
     </div>
   );
 }
