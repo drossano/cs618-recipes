@@ -6,8 +6,7 @@ export function Likes({ likes }) {
   if (token) {
     return (
       <div>
-        <button>Likes</button>
-        {likes.length}
+        <button>Likes</button> {likes.length}
       </div>
     );
   } else {
