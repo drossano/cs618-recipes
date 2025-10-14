@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { User } from "./User.jsx";
 import { TextToList } from "./TextToList.jsx";
 import { Link } from "react-router-dom";
+import { Likes } from "./Likes.jsx";
 import slug from "slug";
 
 export function Recipe({
@@ -10,8 +11,8 @@ export function Recipe({
   steps,
   author,
   image,
-  _id,
   likes,
+  _id,
   fullRecipe = false,
 }) {
   return (
@@ -19,14 +20,14 @@ export function Recipe({
       {fullRecipe ? (
         <div>
           <h3>{name}</h3>
-          <div>Likes: {likes.length}</div>
+          <Likes likes={likes} />
         </div>
       ) : (
         <div>
           <Link to={`/recipes/${_id}/${slug(name)}`}>
             <h3>{name}</h3>
           </Link>
-          <div>Likes: {likes.length}</div>
+
           <img src={image} alt="" />
         </div>
       )}
