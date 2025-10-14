@@ -3,7 +3,7 @@ import { useAuth } from "../contexts/AuthContext.jsx";
 import PropTypes from "prop-types";
 import { User } from "./User.jsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { likeRecipe } from "../api/recipes.js";
+import { likeRecipe, unlikeRecipe } from "../api/recipes.js";
 
 export function Likes({ likes, recipeId }) {
   const [token] = useAuth();
@@ -16,6 +16,14 @@ export function Likes({ likes, recipeId }) {
     e.preventDefault();
     likeRecipeMutation.mutate();
   };
+  const unlikeRecipeMutation = useMutation({
+    mutationFn: () => unlikeRecipe(token, recipeId),
+    onSuccess: () => queryClient.invalidateQueries(["recipes"]),
+  });
+  const handleUnlike = (e) => {
+    e.preventDefault();
+    unlikeRecipeMutation.mutate();
+  };
   if (token) {
     const { sub } = jwtDecode(token);
 
@@ -25,7 +33,7 @@ export function Likes({ likes, recipeId }) {
           <div>
             <User id={sub} />
           </div>
-          <button>Unlike</button> {likes.length}
+          <button onClick={handleUnlike}>Unlike</button> {likes.length}
         </div>
       );
     } else {
