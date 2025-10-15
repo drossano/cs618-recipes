@@ -8,12 +8,12 @@ import { useState } from "react";
 
 export function Likes({ likes, recipeId }) {
   const [token] = useAuth();
+
   const [numLikes, setLikes] = useState(likes.length);
   if (token) {
     const { sub } = jwtDecode(token);
-
-    if (likes.includes(sub)) {
-      const [setLiked] = useState(true);
+    const [liked, setLiked] = useState(likes.includes(sub));
+    if (liked) {
       // put liked in useState for now
       const queryClient = useQueryClient();
       const unlikeRecipeMutation = useMutation({
@@ -36,7 +36,6 @@ export function Likes({ likes, recipeId }) {
         </div>
       );
     } else {
-      const [setLiked] = useState(false);
       // put liked in useState for now
       const queryClient = useQueryClient();
       const likeRecipeMutation = useMutation({
