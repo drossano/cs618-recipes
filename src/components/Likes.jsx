@@ -14,7 +14,6 @@ export function Likes({ likes, recipeId }) {
     const { sub } = jwtDecode(token);
     const [liked, setLiked] = useState(likes.includes(sub));
     if (liked) {
-      // put liked in useState for now
       const queryClient = useQueryClient();
       const unlikeRecipeMutation = useMutation({
         mutationFn: () => unlikeRecipe(token, recipeId),
@@ -23,7 +22,7 @@ export function Likes({ likes, recipeId }) {
       const handleUnlike = (e) => {
         e.preventDefault();
         setLiked(false);
-        setLikes(likes.length - 1);
+        setLikes(numLikes - 1);
         unlikeRecipeMutation.mutate();
       };
 
@@ -36,7 +35,6 @@ export function Likes({ likes, recipeId }) {
         </div>
       );
     } else {
-      // put liked in useState for now
       const queryClient = useQueryClient();
       const likeRecipeMutation = useMutation({
         mutationFn: () => likeRecipe(token, recipeId),
@@ -45,7 +43,7 @@ export function Likes({ likes, recipeId }) {
       const handleLike = (e) => {
         e.preventDefault();
         setLiked(true);
-        setLikes(likes.length + 1);
+        setLikes(numLikes + 1);
         likeRecipeMutation.mutate();
       };
       return (
