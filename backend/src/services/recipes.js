@@ -47,25 +47,16 @@ export async function deleteRecipe(userId, RecipeId) {
 }
 
 export async function likeRecipe(userId, RecipeId) {
-  const recipe = await getRecipeById(RecipeId)
-  if (recipe.likes.includes(userId)) {
-    throw new Error('User already likes this recipe')
-  } else {
-    return await Recipe.findByIdAndUpdate(
-      { _id: RecipeId },
-      { $push: { likes: [userId] } },
-    )
-  }
+  return await Recipe.findByIdAndUpdate(
+    { _id: RecipeId },
+    { $push: { likes: [userId] } },
+  )
 }
 
 export async function unlikeRecipe(userId, RecipeId) {
-  const recipe = await getRecipeById(RecipeId)
-  if (!recipe.likes.includes(userId)) {
-    throw new Error("User doesn't likes this recipe")
-  } else {
-    return await Recipe.findByIdAndUpdate(
-      { _id: RecipeId },
-      { $pullAll: { likes: [userId] } },
-    )
-  }
+  return await Recipe.findByIdAndUpdate(
+    { _id: RecipeId },
+    { $pullAll: { likes: [userId] } },
+    { new: true },
+  )
 }
