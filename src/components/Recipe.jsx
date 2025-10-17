@@ -11,7 +11,6 @@ export function Recipe({
   steps,
   author,
   image,
-
   _id,
   fullRecipe = false,
 }) {
@@ -26,7 +25,11 @@ export function Recipe({
           <Link to={`/recipes/${_id}/${slug(name)}`}>
             <h3>{name}</h3>
           </Link>
-          <Likes recipeId={_id} />
+          <div>
+            <span>
+              <Likes recipeId={_id} />
+            </span>
+          </div>
           <img src={image} alt="" />
         </div>
       )}
