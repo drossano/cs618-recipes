@@ -56,7 +56,7 @@ beforeEach(async () => {
 })
 
 describe('liking recipes', () => {
-  test('should suceed if user doesnt currently like recipe', async () => {
+  test('should succeed if user doesnt currently like recipe', async () => {
     const testLike = await likeRecipe(testUser._id, {
       recipeId: createdSampleRecipes[0]._id,
     })
@@ -64,5 +64,42 @@ describe('liking recipes', () => {
 
     const foundLike = await Like.findById(testLike._id)
     expect(foundLike._id).toBeInstanceOf(mongoose.Types.ObjectId)
+  })
+  test('should succeed if same user likes two different recipes', async () => {
+    const testLike1 = await likeRecipe(testUser._id, {
+      recipeId: createdSampleRecipes[0]._id,
+    })
+    const testLike2 = await likeRecipe(testUser._id, {
+      recipeId: createdSampleRecipes[1]._id,
+    })
+    const foundLike1 = await Like.findById(testLike1._id)
+    expect(foundLike1._id).toBeInstanceOf(mongoose.Types.ObjectId)
+    const foundLike2 = await Like.findById(testLike2._id)
+    expect(foundLike2._id).toBeInstanceOf(mongoose.Types.ObjectId)
+  })
+  test('should succeed if two different users like same recipe', async () => {
+    const testLike1 = await likeRecipe(testUser._id, {
+      recipeId: createdSampleRecipes[0]._id,
+    })
+    const testLike2 = await likeRecipe(testUser2._id, {
+      recipeId: createdSampleRecipes[1]._id,
+    })
+    const foundLike1 = await Like.findById(testLike1._id)
+    expect(foundLike1._id).toBeInstanceOf(mongoose.Types.ObjectId)
+    const foundLike2 = await Like.findById(testLike2._id)
+    expect(foundLike2._id).toBeInstanceOf(mongoose.Types.ObjectId)
+  })
+  test('should fail if user currently likes recipe', async () => {
+    try {
+      await likeRecipe(testUser._id, {
+        recipeId: createdSampleRecipes[0]._id,
+      })
+      await likeRecipe(testUser._id, {
+        recipeId: createdSampleRecipes[0]._id,
+      })
+    } catch (err) {
+      expect(err).toBeInstanceOf(mongoose.mongo.MongoServerError)
+      expect(err.message).toContain('duplicate key')
+    }
   })
 })
