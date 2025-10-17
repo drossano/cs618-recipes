@@ -16,7 +16,7 @@ export function Likes(recipeId) {
     likeRecipeMutation.mutate();
   };
 
-  if (!token) return <div>Please log in to like</div>;
+  if (!token) return <button>Like</button>;
   return <button onClick={handleLike}>Like</button>;
 }
 

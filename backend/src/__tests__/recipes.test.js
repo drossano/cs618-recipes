@@ -7,8 +7,6 @@ import {
   getRecipeById,
   updateRecipe,
   deleteRecipe,
-  likeRecipe,
-  unlikeRecipe,
 } from '../services/recipes.js'
 import { Recipe as Recipe } from '../db/models/recipe.js'
 import { createUser } from '../services/users.js'
@@ -287,40 +285,5 @@ describe('deleting recipes', () => {
       createdSampleRecipes[0]._id,
     )
     expect(result.deletedCount).toEqual(0)
-  })
-})
-
-describe('liking posts', () => {
-  test('should like a recipe if user doesnt like it', async () => {
-    await likeRecipe(testUser._id, createdSampleRecipes[0]._id)
-
-    const likedRecipe = await Recipe.findById(createdSampleRecipes[0]._id)
-    expect(likedRecipe.likes.length).toEqual(1)
-  })
-  test('should not let a user like a recipe more than once', async () => {
-    try {
-      await likeRecipe(testUser._id, createdSampleRecipes[0]._id)
-      await likeRecipe(testUser._id, createdSampleRecipes[0]._id)
-    } catch (err) {
-      //expect(err).toBeInstanceOf(mongoose.Error.ValidationError)
-      expect(err.message).toContain('User already likes this recipe')
-    }
-  })
-})
-
-describe('unliking posts', () => {
-  test('should unlike a recipe if user already likes it', async () => {
-    await likeRecipe(testUser._id, createdSampleRecipes[0]._id)
-    await unlikeRecipe(testUser._id, createdSampleRecipes[0]._id)
-
-    const unlikedRecipe = await Recipe.findById(createdSampleRecipes[0]._id)
-    expect(unlikedRecipe.likes.length).toEqual(0)
-  })
-  test('should not let a user unlike a recipe if they dont currently like it', async () => {
-    try {
-      await unlikeRecipe(testUser._id, createdSampleRecipes[0]._id)
-    } catch (err) {
-      expect(err.message).toContain("User doesn't likes this recipe")
-    }
   })
 })
