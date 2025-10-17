@@ -11,3 +11,7 @@ export async function likeRecipe(
 export async function getLikeById(likeId) {
   return await Like.findById(likeId)
 }
+
+export async function unlikeRecipe(userId, recipeId) {
+  return await Like.deleteOne({ recipe: recipeId, user: userId })
+}
