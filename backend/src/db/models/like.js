@@ -8,4 +8,4 @@ const likeSchema = new Schema(
   { timestamps: true },
 )
 
-export const Like = mongoose.model('recipe', likeSchema)
+export const Like = mongoose.model('like', likeSchema)

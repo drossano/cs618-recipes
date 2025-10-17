@@ -67,8 +67,8 @@ export function recipesRoutes(app) {
   })
   app.patch('/api/v1/recipes/like/:id', requireAuth, async (req, res) => {
     try {
-      await likeRecipe(req.auth.sub, req.params.id)
-      return res.status(204).end()
+      const likedRecipe = await likeRecipe(req.auth.sub, req.params.id)
+      return res.json(likedRecipe)
     } catch (error) {
       console.error('error liking recipe', error)
       return res.status(500).end()
@@ -76,8 +76,8 @@ export function recipesRoutes(app) {
   })
   app.patch('/api/v1/recipes/unlike/:id', requireAuth, async (req, res) => {
     try {
-      await unlikeRecipe(req.auth.sub, req.params.id)
-      return res.status(204).end()
+      const unlikedRecipe = await unlikeRecipe(req.auth.sub, req.params.id)
+      return res.json(unlikedRecipe)
     } catch (error) {
       console.error('error unliking recipe', error)
       return res.status(500).end()
