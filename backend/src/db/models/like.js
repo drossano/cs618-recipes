@@ -4,6 +4,8 @@ const likeSchema = new Schema(
   {
     recipe: { type: Schema.Types.ObjectId, ref: 'recipe', required: true },
     user: { type: Schema.Types.ObjectId, ref: 'user', required: true },
+    session: { type: String, required: true },
+    date: { type: Date, required: true },
   },
   { timestamps: true },
 )

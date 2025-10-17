@@ -11,7 +11,7 @@ export function Recipe({
   steps,
   author,
   image,
-  likes,
+
   _id,
   fullRecipe = false,
 }) {
@@ -20,14 +20,13 @@ export function Recipe({
       {fullRecipe ? (
         <div>
           <h3>{name}</h3>
-          <Likes likes={likes} recipeId={_id} />
         </div>
       ) : (
         <div>
           <Link to={`/recipes/${_id}/${slug(name)}`}>
             <h3>{name}</h3>
           </Link>
-          <Likes likes={likes} recipeId={_id} /> <div>{likes.length}</div>
+          <Likes recipeId={_id} />
           <img src={image} alt="" />
         </div>
       )}
@@ -64,6 +63,5 @@ Recipe.propTypes = {
   author: PropTypes.string,
   image: PropTypes.string,
   _id: PropTypes.string.isRequired,
-  likes: PropTypes.array,
   fullRecipe: PropTypes.bool,
 };

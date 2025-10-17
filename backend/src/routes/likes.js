@@ -1,27 +1,18 @@
-import { likeRecipe, unlikeRecipe } from '../services/likes.js'
+import { likeRecipe } from '../services/likes.js'
+import { getRecipeById } from '../services/recipes.js'
 
 import { requireAuth } from '../middleware/jwt.js'
 
-export function likesRoutes(app) {
-  app.post('/api/v1/like', requireAuth, async (req, res) => {
+export function likeRoutes(app) {
+  app.post('/api/v1/likes', requireAuth, async (req, res) => {
     try {
-      const like = await likeRecipe(req.params.id, req.auth.sub)
-      return res.json(like)
+      const { recipeId, session } = req.body
+      const recipe = await getRecipeById(recipeId)
+      if (recipe === null) return res.status(400).end()
+      const like = await likeRecipe(req.auth.sub, { recipeId, session })
+      return res.json({ like: like.session })
     } catch (err) {
-      console.err('error liking recipe', err)
-      return res.status(500).end()
-    }
-  })
-  app.delete('/api/v1/unlike', requireAuth, async (req, res) => {
-    try {
-      const { deletedLikeCount } = await unlikeRecipe(
-        req.params.id,
-        req.auth.sub,
-      )
-      if (deletedLikeCount == 0) return res.sendStatus(404)
-      return res.status(204).end()
-    } catch (err) {
-      console.error('error deleting recipe', err)
+      console.error('error liking recipe', err)
       return res.status(500).end()
     }
   })

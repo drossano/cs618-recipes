@@ -1,66 +1,23 @@
-import { jwtDecode } from "jwt-decode";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import PropTypes from "prop-types";
-import { User } from "./User.jsx";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { likeRecipe, unlikeRecipe } from "../api/recipes.js";
+import { useMutation } from "@tanstack/react-query";
+import { likeRecipe } from "../api/likes.js";
 import { useState } from "react";
 
-export function Likes({ likes, recipeId }) {
+export function Likes(recipeId) {
   const [token] = useAuth();
+  const [session, setSession] = useState();
+  const likeRecipeMutation = useMutation({
+    mutationFn: () => likeRecipe(token, recipeId, session),
+    onSuccess: (data) => setSession(data?.session),
+  });
+  const handleLike = (e) => {
+    e.preventDefault();
+    likeRecipeMutation.mutate();
+  };
 
-  const [numLikes, setLikes] = useState(likes.length);
-  if (token) {
-    const { sub } = jwtDecode(token);
-    const [liked, setLiked] = useState(likes.includes(sub));
-    if (liked) {
-      const queryClient = useQueryClient();
-      const unlikeRecipeMutation = useMutation({
-        mutationFn: () => unlikeRecipe(token, recipeId),
-        onSuccess: () => queryClient.invalidateQueries(["recipe"]),
-      });
-      const handleUnlike = (e) => {
-        e.preventDefault();
-        setLiked(false);
-        setLikes(numLikes - 1);
-        unlikeRecipeMutation.mutate();
-      };
-
-      return (
-        <div>
-          <div>
-            <User id={sub} />
-          </div>
-          <button onClick={handleUnlike}>Unlike</button> {numLikes}
-        </div>
-      );
-    } else {
-      const queryClient = useQueryClient();
-      const likeRecipeMutation = useMutation({
-        mutationFn: () => likeRecipe(token, recipeId),
-        onSuccess: () => queryClient.invalidateQueries(["recipe"]),
-      });
-      const handleLike = (e) => {
-        e.preventDefault();
-        setLiked(true);
-        setLikes(numLikes + 1);
-        likeRecipeMutation.mutate();
-      };
-      return (
-        <div>
-          <div>
-            <User id={sub} />
-          </div>
-          <button onClick={handleLike}>Like</button> {numLikes}
-        </div>
-      );
-    }
-  }
-  return (
-    <div>
-      <div>Likes: {numLikes}</div>
-    </div>
-  );
+  if (!token) return <div>Please log in to like</div>;
+  return <button onClick={handleLike}>Like</button>;
 }
 
 Likes.propTypes = {
