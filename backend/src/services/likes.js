@@ -15,3 +15,9 @@ export async function getLikeById(likeId) {
 export async function unlikeRecipe(userId, recipeId) {
   return await Like.deleteOne({ recipe: recipeId, user: userId })
 }
+
+export async function getTotalLikes(recipeId) {
+  return {
+    likes: await Like.countDocuments({ recipe: recipeId }),
+  }
+}
