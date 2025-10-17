@@ -7,7 +7,7 @@ const recipeSchema = new Schema(
     ingredients: String,
     steps: String,
     image: String,
-    likes: [{ type: Schema.Types.ObjectId, ref: 'user' }],
+    likes: Number,
   },
   { timestamps: true },
 )

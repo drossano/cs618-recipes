@@ -5,7 +5,14 @@ export async function createRecipe(
   userId,
   { name, ingredients, steps, image },
 ) {
-  const recipe = new Recipe({ name, author: userId, ingredients, steps, image })
+  const recipe = new Recipe({
+    name,
+    author: userId,
+    ingredients,
+    steps,
+    image,
+    likes: 0,
+  })
   return await recipe.save()
 }
 
@@ -38,6 +45,14 @@ export async function updateRecipe(
   return await Recipe.findOneAndUpdate(
     { _id: RecipeId, author: userId },
     { $set: { name, ingredients, steps, image } },
+    { new: true },
+  )
+}
+
+export async function updateRecipeLikes(RecipeId, { likes }) {
+  return await Recipe.findOneAndUpdate(
+    { _id: RecipeId },
+    { $set: { likes } },
     { new: true },
   )
 }

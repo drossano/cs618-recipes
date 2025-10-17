@@ -1,5 +1,7 @@
 import { Like } from '../db/models/like.js'
 import { v4 as uuidv4 } from 'uuid'
+import { updateRecipeLikes } from './recipes.js'
+
 export async function likeRecipe(
   userId,
   { recipeId, session = uuidv4(), date = Date.now() },
@@ -21,7 +23,9 @@ export async function unlikeRecipe(userId, recipeId) {
 }
 
 export async function getTotalLikes(recipeId) {
+  const totalLikes = await Like.countDocuments({ recipe: recipeId })
+  await updateRecipeLikes(recipeId, { likes: totalLikes })
   return {
-    likes: await Like.countDocuments({ recipe: recipeId }),
+    likes: totalLikes,
   }
 }
