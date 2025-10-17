@@ -1,11 +1,12 @@
 import { useAuth } from "../contexts/AuthContext.jsx";
 import PropTypes from "prop-types";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { likeRecipe, getTotalLikes } from "../api/likes.js";
 1;
 import { useState } from "react";
 
 export function Likes({ recipeId }) {
+  const queryClient = useQueryClient();
   const totalLikes = useQuery({
     queryKey: ["totalLikes", recipeId],
     queryFn: () => getTotalLikes(recipeId),
@@ -14,7 +15,10 @@ export function Likes({ recipeId }) {
   const [session, setSession] = useState();
   const likeRecipeMutation = useMutation({
     mutationFn: () => likeRecipe(token, { recipeId }, session),
-    onSuccess: (data) => setSession(data?.session),
+    onSuccess: (data) => {
+      setSession(data?.session), queryClient.invalidateQueries(["totalLikes"]);
+      queryClient.invalidateQueries(["totalLikes"]);
+    },
   });
   const handleLike = (e) => {
     e.preventDefault();
