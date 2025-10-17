@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 import { describe, expect, test, beforeEach, beforeAll } from '@jest/globals'
-import { likeRecipe } from '../services/likes.js'
+import { likeRecipe, unlikeRecipe } from '../services/likes.js'
 import { Recipe as Recipe } from '../db/models/recipe.js'
 import { Like } from '../db/models/like.js'
 import { createUser } from '../services/users.js'
@@ -101,5 +101,40 @@ describe('liking recipes', () => {
       expect(err).toBeInstanceOf(mongoose.mongo.MongoServerError)
       expect(err.message).toContain('duplicate key')
     }
+  })
+})
+
+describe('unliking recipes', () => {
+  let createdSampleLikes = []
+  beforeEach(async () => {
+    await Like.deleteMany({})
+    const sampleLike = await likeRecipe(testUser._id, {
+      recipeId: createdSampleRecipes[0]._id,
+    })
+    createdSampleLikes.push(sampleLike)
+  })
+  test('should remove the like from the database', async () => {
+    const result = await unlikeRecipe(testUser._id, createdSampleRecipes[0]._id)
+    expect(result.deletedCount).toEqual(1)
+    const deletedLike = await Like.findById(createdSampleLikes[0]._id)
+    expect(deletedLike).toEqual(null)
+  })
+  test('should fail if the recipe id doesnt exist', async () => {
+    const result = await unlikeRecipe(testUser._id, '000000000000000000000000')
+    expect(result.deletedCount).toEqual(0)
+  })
+  test('should fail if the user id doesnt exist', async () => {
+    const result = await unlikeRecipe(
+      '000000000000000000000000',
+      createdSampleRecipes[0]._id,
+    )
+    expect(result.deletedCount).toEqual(0)
+  })
+  test('should fail if the recipe and user id dont exist', async () => {
+    const result = await unlikeRecipe(
+      '000000000000000000000000',
+      '000000000000000000000000',
+    )
+    expect(result.deletedCount).toEqual(0)
   })
 })
