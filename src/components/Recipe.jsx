@@ -26,15 +26,14 @@ export function Recipe({
             <h3>{name}</h3>
           </Link>
           <div>
-            <span>
-              <Likes recipeId={_id} />
-            </span>
+            <Likes recipeId={_id} />
           </div>
           <img src={image} alt="" />
         </div>
       )}
       {fullRecipe && (
         <div>
+          <Likes recipeId={_id} />
           <div>
             <img src={image} alt="" />
           </div>

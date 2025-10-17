@@ -1,4 +1,4 @@
-import { likeRecipe, getTotalLikes } from '../services/likes.js'
+import { likeRecipe, getTotalLikes, unlikeRecipe } from '../services/likes.js'
 import { getRecipeById } from '../services/recipes.js'
 
 import { requireAuth } from '../middleware/jwt.js'
@@ -25,6 +25,20 @@ export function likeRoutes(app) {
       return res.json(stats)
     } catch (err) {
       console.error('error getting likes', err)
+      return res.status(500).end()
+    }
+  })
+  app.delete('/api/v1/likes/:recipeId/:userId', async (req, res) => {
+    try {
+      const recipeId = req.params['recipeId']
+      const userId = req.params['userId']
+      console.log(recipeId)
+      console.log(userId)
+      const { deletedCount } = await unlikeRecipe(userId, recipeId)
+      if (deletedCount == 0) return res.sendStatus(404)
+      return res.status(204).end()
+    } catch (err) {
+      console.error('error unliking', err)
       return res.status(500).end()
     }
   })
