@@ -38,7 +38,7 @@ export function likeRoutes(app) {
       const recipeId = req.params['recipeId']
       const userId = req.params['userId']
       const like = await getLikeByRecipeAndUserIds(userId, recipeId)
-      if (like === null) return res.status(400).end()
+      if (like === null) return res.status(404).end()
       return res.json(like)
     } catch (err) {
       console.error('error getting like', err)

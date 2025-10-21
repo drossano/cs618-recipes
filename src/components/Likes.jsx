@@ -20,6 +20,7 @@ export function Likes({ recipeId }) {
   });
 
   const [token] = useAuth();
+  if (!token) return <button>🖤 {totalLikes.data?.likes}</button>;
   const [session, setSession] = useState();
   let sub = null;
   if (token) {
@@ -29,19 +30,18 @@ export function Likes({ recipeId }) {
   const isLiked = useQuery({
     queryKey: ["isLiked", sub, recipeId],
     queryFn: () => getLikeByRecipeAndUserIds(sub, recipeId),
+    retry: 0,
   });
   const likeRecipeMutation = useMutation({
     mutationFn: () => likeRecipe(token, { recipeId }, session),
     onSuccess: (data) => {
-      setSession(data?.session),
-        queryClient.invalidateQueries(["totalLikes", "IsLiked"]);
+      setSession(data?.session), queryClient.invalidateQueries();
     },
   });
   const unlikeRecipeMutation = useMutation({
     mutationFn: () => unlikeRecipe(token, sub, recipeId),
-    onSuccess: (data) => {
-      setSession(data?.session),
-        queryClient.invalidateQueries(["totalLikes", "IsLiked"]);
+    onSuccess: () => {
+      queryClient.invalidateQueries();
     },
   });
   const handleLike = (e) => {
@@ -58,7 +58,6 @@ export function Likes({ recipeId }) {
   } else if (!isLiked.isError) {
     return <button onClick={handleUnlike}>❤️ {totalLikes.data?.likes}</button>;
   }
-  if (!token) return <button>🖤 {totalLikes.data?.likes}</button>;
 }
 
 Likes.propTypes = {
