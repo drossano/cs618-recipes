@@ -4,6 +4,7 @@ export const userSchema = `#graphql
 type User{
   username: String!
   recipes: [Recipe!]!
+  likes:[Like!]!
 }`
 
 export const userResolver = {

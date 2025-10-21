@@ -1,4 +1,5 @@
 import { getUserInfoById } from '../services/users.js'
+import { getLikesByRecipeId } from '../services/likes.js'
 
 export const recipeSchema = `#graphql
 type Recipe{
@@ -8,7 +9,7 @@ type Recipe{
   steps: String
   ingredients: String
   image: String
-  likes: Int
+  likes: [Like!]!
   createdAt: Float
   updatedAt: Float
 }`
@@ -17,6 +18,9 @@ export const recipeResolver = {
   Recipe: {
     author: async (recipe) => {
       return await getUserInfoById(recipe.author)
+    },
+    likes: async (recipe) => {
+      return await getLikesByRecipeId(recipe.id)
     },
   },
 }

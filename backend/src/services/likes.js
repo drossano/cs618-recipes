@@ -18,6 +18,9 @@ export async function getLikeByRecipeAndUserIds(userId, recipeId) {
   return await Like.findOne({ recipe: recipeId, user: userId })
 }
 
+export async function getLikesByRecipeId(recipeId) {
+  return await Like.find({ recipe: recipeId })
+}
 export async function unlikeRecipe(userId, recipeId) {
   return await Like.deleteOne({ recipe: recipeId, user: userId })
 }
