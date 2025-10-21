@@ -5,11 +5,15 @@ import {
 } from '../services/recipes.js'
 
 export const querySchema = `#graphql
+input RecipesOptions {
+  sortBy: String
+  sortOrder: String
+}
 type Query {
   test: String
-  recipes: [Recipe!]!
-  recipesByAuthor(username: String!): [Recipe!]!
-  recipesById(id: ID!): Recipe
+  recipes(options: RecipesOptions): [Recipe!]!
+  recipesByAuthor(username: String!,options: RecipesOptions ): [Recipe!]!
+  recipesById(id: ID!, options: RecipesOptions): Recipe
 }`
 
 export const queryResolver = {
@@ -17,14 +21,14 @@ export const queryResolver = {
     test: () => {
       return 'Hello world from GraphQL!'
     },
-    recipes: async () => {
-      return await listAllRecipes()
+    recipes: async (parent, { options }) => {
+      return await listAllRecipes(options)
     },
-    recipesByAuthor: async (parent, { username }) => {
-      return await listRecipesByAuthor(username)
+    recipesByAuthor: async (parent, { username, options }) => {
+      return await listRecipesByAuthor(username, options)
     },
-    recipesById: async (parent, { id }) => {
-      return await getRecipeById(id)
+    recipesById: async (parent, { id, options }) => {
+      return await getRecipeById(id, options)
     },
   },
 }
