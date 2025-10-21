@@ -4,6 +4,9 @@ import { userRoutes } from './routes/users.js'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import { likeRoutes } from './routes/likes.js'
+import { ApolloServer } from '@apollo/server'
+import { expressMiddleware } from '@apollo/server/express4'
+import { typeDefs, resolvers } from './graphql/index.js'
 
 const app = express()
 app.use(cors())
@@ -17,3 +20,12 @@ app.get('/', (req, res) => {
 })
 
 export { app }
+
+const apolloServer = new ApolloServer({
+  typeDefs,
+  resolvers,
+})
+
+apolloServer
+  .start()
+  .then(() => app.use('/graphql', expressMiddleware(apolloServer)))
