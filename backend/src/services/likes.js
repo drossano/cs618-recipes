@@ -29,3 +29,7 @@ export async function getTotalLikes(recipeId) {
     likes: totalLikes,
   }
 }
+
+export async function checkIfLiked(userId, recipeId) {
+  if (getLikeByRecipeAndUserIds(userId, recipeId));
+}
