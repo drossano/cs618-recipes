@@ -9,7 +9,7 @@ type Mutation {
   loginUser(username: String!, password: String!): String
   createRecipe(name: String!, steps: String, ingredients: String, image: String): Recipe
   likeRecipe(recipe: ID!,): Like
-  unlikeRecipe(recipe: ID!): ID!
+  unlikeRecipe(recipe: ID!): String
 }`
 
 export const mutationResolver = {
@@ -66,7 +66,7 @@ export const mutationResolver = {
       }
       console.log('gql user', auth.sub)
       console.log('gql recipe', recipe)
-      return await unlikeRecipe(auth.sub, { recipeId: recipe })
+      return await unlikeRecipe(auth.sub, recipe)
     },
   },
 }
