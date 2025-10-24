@@ -6,6 +6,8 @@ export async function likeRecipe(
   userId,
   { recipeId, session = uuidv4(), date = Date.now() },
 ) {
+  console.log('service user:', userId)
+  console.log('service recipe:', recipeId)
   const like = new Like({ recipe: recipeId, user: userId, session, date })
   return await like.save()
 }

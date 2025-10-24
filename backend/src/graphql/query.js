@@ -3,6 +3,7 @@ import {
   listAllRecipes,
   listRecipesByAuthor,
 } from '../services/recipes.js'
+import { getUserInfoById } from '../services/users.js'
 
 export const querySchema = `#graphql
 input RecipesOptions {
@@ -14,6 +15,7 @@ type Query {
   recipes(options: RecipesOptions): [Recipe!]!
   recipesByAuthor(username: String!,options: RecipesOptions ): [Recipe!]!
   recipesById(id: ID!, options: RecipesOptions): Recipe
+  userById(userId: ID!): User
 }`
 
 export const queryResolver = {
@@ -29,6 +31,9 @@ export const queryResolver = {
     },
     recipesById: async (parent, { id, options }) => {
       return await getRecipeById(id, options)
+    },
+    userById: async (parent, { userId }) => {
+      return await getUserInfoById(userId)
     },
   },
 }

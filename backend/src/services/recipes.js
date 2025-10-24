@@ -13,6 +13,7 @@ export async function createRecipe(
     image,
     likes: 0,
   })
+  console.log(name)
   return await recipe.save()
 }
 

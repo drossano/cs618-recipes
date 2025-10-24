@@ -7,6 +7,7 @@ import { likeRoutes } from './routes/likes.js'
 import { ApolloServer } from '@apollo/server'
 import { expressMiddleware } from '@apollo/server/express4'
 import { typeDefs, resolvers } from './graphql/index.js'
+import { optionalAuth } from './middleware/jwt.js'
 
 const app = express()
 app.use(cors())
@@ -26,6 +27,14 @@ const apolloServer = new ApolloServer({
   resolvers,
 })
 
-apolloServer
-  .start()
-  .then(() => app.use('/graphql', expressMiddleware(apolloServer)))
+apolloServer.start().then(() =>
+  app.use(
+    '/graphql',
+    optionalAuth,
+    expressMiddleware(apolloServer, {
+      context: async ({ req }) => {
+        return { auth: req.auth }
+      },
+    }),
+  ),
+)
