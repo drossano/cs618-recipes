@@ -51,7 +51,7 @@ export function Recipe({
       {author && (
         <em>
           {fullRecipe && <br />}
-          Written by <User id={author} />
+          Written by <User {...author} />
         </em>
       )}
     </article>
@@ -62,7 +62,7 @@ Recipe.propTypes = {
   name: PropTypes.string.isRequired,
   ingredients: PropTypes.string,
   steps: PropTypes.string,
-  author: PropTypes.string,
+  author: PropTypes.shape(User.propTypes),
   image: PropTypes.string,
   id: PropTypes.string.isRequired,
   fullRecipe: PropTypes.bool,

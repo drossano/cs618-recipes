@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Header } from "../components/Header.jsx";
 import { Recipe } from "../components/Recipe.jsx";
 import { getRecipeById } from "../api/recipes.js";
+import { getUserInfo } from "../api/users.js";
 import { Helmet } from "react-helmet-async";
 
 export function ViewRecipe({ recipeId }) {
@@ -12,6 +13,12 @@ export function ViewRecipe({ recipeId }) {
     queryFn: () => getRecipeById(recipeId),
   });
   const recipe = recipeQuery.data;
+  const userinfoQuery = useQuery({
+    queryKey: ["users", recipe?.author],
+    queryFn: () => getUserInfo(recipe?.author),
+    enabled: Boolean(recipe?.author),
+  });
+  const userInfo = userinfoQuery.data ?? {};
   return (
     <div style={{ padding: 8 }}>
       {recipe && (
@@ -26,7 +33,7 @@ export function ViewRecipe({ recipeId }) {
       <br />
       <hr />
       {recipe ? (
-        <Recipe {...recipe} id={recipeId} fullRecipe />
+        <Recipe {...recipe} id={recipeId} author={userInfo} fullRecipe />
       ) : (
         `Recipe with id ${recipeId} not found`
       )}
