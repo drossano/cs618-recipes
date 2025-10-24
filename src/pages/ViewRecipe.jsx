@@ -26,7 +26,7 @@ export function ViewRecipe({ recipeId }) {
       <br />
       <hr />
       {recipe ? (
-        <Recipe {...recipe} fullRecipe />
+        <Recipe {...recipe} id={recipeId} fullRecipe />
       ) : (
         `Recipe with id ${recipeId} not found`
       )}

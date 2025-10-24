@@ -1,9 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@apollo/client/react/index.js";
+import { GET_RECIPES } from "../api/graphql/recipes.js";
 import { RecipeList } from "../components/RecipeList.jsx";
 import { CreateRecipe } from "../components/CreateRecipe.jsx";
 import { RecipeFilter } from "../components/RecipeFilter.jsx";
 import { RecipeSorting } from "../components/RecipeSorting.jsx";
-import { getRecipes } from "../api/recipes.js";
 import { useState } from "react";
 import { Header } from "../components/Header.jsx";
 import { Helmet } from "react-helmet-async";
@@ -13,11 +13,8 @@ export function Blog() {
   const [author, setAuthor] = useState("");
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortOrder, setSortOrder] = useState("descending");
-  const recipesQuery = useQuery({
-    queryKey: ["recipes", { author, sortBy, sortOrder }],
-    queryFn: () => getRecipes({ author, sortBy, sortOrder }),
-  });
-  const recipes = recipesQuery.data ?? [];
+  const recipesQuery = useQuery(GET_RECIPES);
+  const recipes = recipesQuery.data?.recipes ?? [];
   return (
     <div style={{ padding: 8 }}>
       <Helmet>
