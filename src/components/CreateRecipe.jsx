@@ -1,6 +1,12 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@apollo/client/react/index.js";
+import { Link } from "react-router-dom";
+import slug from "slug";
 import { useState } from "react";
-import { createRecipe } from "../api/recipes.js";
+import {
+  CREATE_RECIPE,
+  GET_RECIPES,
+  GET_RECIPES_BY_AUTHOR,
+} from "../api/graphql/recipes.js";
 import { useAuth } from "../contexts/AuthContext.jsx";
 
 export function CreateRecipe() {
@@ -9,20 +15,16 @@ export function CreateRecipe() {
   const [ingredients, setIngredients] = useState("");
   const [steps, setSteps] = useState("");
   const [image, setImage] = useState("");
-  const queryClient = useQueryClient();
-  const createRecipeMutation = useMutation({
-    mutationFn: () =>
-      createRecipe(token, {
-        name: name,
-        ingredients: ingredients,
-        steps: steps,
-        image: image,
-      }),
-    onSuccess: () => queryClient.invalidateQueries(["recipes"]),
+
+  const [createRecipe, { loading, data }] = useMutation(CREATE_RECIPE, {
+    variables: { name, ingredients, steps, image },
+    context: { headers: { Authorization: `Bearer ${token}` } },
+    refetchQueries: [GET_RECIPES, GET_RECIPES_BY_AUTHOR],
   });
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    createRecipeMutation.mutate();
+    createRecipe();
   };
   if (!token) return <div>Please log in to create new recipes.</div>;
   return (
@@ -64,11 +66,20 @@ export function CreateRecipe() {
       />
       <br />
       <br />
-      <input
-        type="submit"
-        value={createRecipeMutation.isPending ? "Creating..." : "Create"}
-        disabled={!name || createRecipeMutation.isPending}
-      />
+      <input type="submit" value={loading ? "Creating..." : "Create"} />
+      {data?.createRecipe ? (
+        <>
+          <br />
+          <Link
+            to={`/recipes/${data.createRecipe.id}/${slug(
+              data.createRecipe.name,
+            )}`}
+          >
+            {data.createRecipe.name}
+          </Link>{" "}
+          created successfully!
+        </>
+      ) : null}
     </form>
   );
 }

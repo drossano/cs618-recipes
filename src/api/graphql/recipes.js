@@ -36,3 +36,22 @@ export const GET_RECIPES_BY_AUTHOR = gql`
     }
   }
 `;
+
+export const CREATE_RECIPE = gql`
+  mutation createRecipe(
+    $name: String!
+    $steps: String
+    $ingredients: String
+    $image: String
+  ) {
+    createRecipe(
+      name: $name
+      ingredients: $ingredients
+      steps: $steps
+      image: $image
+    ) {
+      id
+      name
+    }
+  }
+`;
