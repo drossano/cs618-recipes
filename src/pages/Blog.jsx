@@ -13,7 +13,9 @@ export function Blog() {
   const [author, setAuthor] = useState("");
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortOrder, setSortOrder] = useState("descending");
-  const recipesQuery = useQuery(GET_RECIPES);
+  const recipesQuery = useQuery(GET_RECIPES, {
+    variables: { options: { sortBy, sortOrder } },
+  });
   const recipes = recipesQuery.data?.recipes ?? [];
   return (
     <div style={{ padding: 8 }}>
