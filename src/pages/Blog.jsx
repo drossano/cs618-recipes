@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client/react/index.js";
-import { GET_RECIPES } from "../api/graphql/recipes.js";
+import { GET_RECIPES, GET_RECIPES_BY_AUTHOR } from "../api/graphql/recipes.js";
 import { RecipeList } from "../components/RecipeList.jsx";
 import { CreateRecipe } from "../components/CreateRecipe.jsx";
 import { RecipeFilter } from "../components/RecipeFilter.jsx";
@@ -13,10 +13,11 @@ export function Blog() {
   const [author, setAuthor] = useState("");
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortOrder, setSortOrder] = useState("descending");
-  const recipesQuery = useQuery(GET_RECIPES, {
-    variables: { options: { sortBy, sortOrder } },
+  const recipesQuery = useQuery(author ? GET_RECIPES_BY_AUTHOR : GET_RECIPES, {
+    variables: { author, options: { sortBy, sortOrder } },
   });
-  const recipes = recipesQuery.data?.recipes ?? [];
+  const recipes =
+    recipesQuery.data?.recipesByAuthor ?? recipesQuery.data?.recipes ?? [];
   return (
     <div style={{ padding: 8 }}>
       <Helmet>
