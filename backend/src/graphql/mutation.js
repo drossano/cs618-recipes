@@ -1,7 +1,7 @@
 import { GraphQLError } from 'graphql'
 import { createUser, loginUser } from '../services/users.js'
 import { createRecipe } from '../services/recipes.js'
-import { likeRecipe, unlikeRecipe } from '../services/likes.js'
+import { likeRecipe } from '../services/likes.js'
 
 export const mutationSchema = `#graphql
 type Mutation {
@@ -52,21 +52,6 @@ export const mutationResolver = {
       console.log('gql user', auth.sub)
       console.log('gql recipe', recipe)
       return await likeRecipe(auth.sub, { recipeId: recipe })
-    },
-    unlikeRecipe: async (parent, { recipe }, { auth }) => {
-      if (!auth) {
-        throw new GraphQLError(
-          'You need to be authenticated to perform this action.',
-          {
-            extensions: {
-              code: 'UNAUTHORIZED',
-            },
-          },
-        )
-      }
-      console.log('gql user', auth.sub)
-      console.log('gql recipe', recipe)
-      return await unlikeRecipe(auth.sub, recipe)
     },
   },
 }
