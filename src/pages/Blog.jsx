@@ -8,6 +8,7 @@ import { useState } from "react";
 import { Header } from "../components/Header.jsx";
 import { Helmet } from "react-helmet-async";
 import "./Blog.css";
+import { Status } from "../components/Status.jsx";
 
 export function Blog() {
   const [author, setAuthor] = useState("");
@@ -27,6 +28,9 @@ export function Blog() {
       <br />
       <hr />
       <br />
+      <Status />
+      <br />
+      <hr />
       <CreateRecipe />
       <br />
       <hr />
