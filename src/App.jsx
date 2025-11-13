@@ -17,6 +17,9 @@ socket.on("connect_error", (err) => {
   console.error("socket.io connect error:", err);
 });
 
+socket.on("recipe.add", (recipe) => {
+  console.log(`${recipe.username}: ${recipe.recipe}`);
+});
 const queryClient = new QueryClient();
 const apolloClient = new ApolloClient({
   uri: import.meta.env.VITE_GRAPHQL_URL,

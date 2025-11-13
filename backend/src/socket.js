@@ -6,6 +6,10 @@ export function handleSocket(io) {
     })
     socket.on('recipe.add', (recipe) => {
       console.log(`${recipe}`)
+      socket.broadcast.emit('recipe.add', {
+        username: socket.id,
+        recipe,
+      })
     })
   })
 }
