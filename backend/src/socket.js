@@ -11,5 +11,13 @@ export function handleSocket(io) {
         recipe,
       })
     })
+    socket.on('user.info', async (socketId, callback) => {
+      const sockets = await io.in(socketId).fetchSockets()
+      if (sockets.length === 0) return callback(null)
+      const userInfo = {
+        socketId,
+      }
+      return callback(userInfo)
+    })
   })
 }

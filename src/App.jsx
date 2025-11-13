@@ -8,9 +8,11 @@ import { io } from "socket.io-client";
 
 const socket = io(import.meta.env.VITE_SOCKET_HOST);
 
-socket.on("connect", () => {
+socket.on("connect", async () => {
   console.log("connected to socket.io as", socket.id);
   socket.emit("recipe.add", "hello from client");
+  const userInfo = await socket.emitWithAck("user.info", socket.id);
+  console.log("user info", userInfo);
 });
 
 socket.on("connect_error", (err) => {
