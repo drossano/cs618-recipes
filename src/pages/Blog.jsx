@@ -9,8 +9,9 @@ import { Header } from "../components/Header.jsx";
 import { Helmet } from "react-helmet-async";
 import "./Blog.css";
 import { Status } from "../components/Status.jsx";
-
+import { useSocket } from "../contexts/SocketIOContext.jsx";
 export function Blog() {
+  const { status } = useSocket();
   const [author, setAuthor] = useState("");
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortOrder, setSortOrder] = useState("descending");
@@ -31,25 +32,29 @@ export function Blog() {
       <Status />
       <br />
       <hr />
-      <CreateRecipe />
-      <br />
-      <hr />
-      Filter by:
-      <RecipeFilter
-        field="author"
-        value={author}
-        onChange={(value) => setAuthor(value)}
-      />
-      <br />
-      <RecipeSorting
-        fields={["createdAt", "updatedAt", "likes"]}
-        value={sortBy}
-        onChange={(value) => setSortBy(value)}
-        orderValue={sortOrder}
-        onOrderChange={(orderValue) => setSortOrder(orderValue)}
-      />
-      <hr />
-      <RecipeList recipes={recipes} />
+      {status === "connected" && (
+        <div>
+          <CreateRecipe />
+          <br />
+          <hr />
+          Filter by:
+          <RecipeFilter
+            field="author"
+            value={author}
+            onChange={(value) => setAuthor(value)}
+          />
+          <br />
+          <RecipeSorting
+            fields={["createdAt", "updatedAt", "likes"]}
+            value={sortBy}
+            onChange={(value) => setSortBy(value)}
+            orderValue={sortOrder}
+            onOrderChange={(orderValue) => setSortOrder(orderValue)}
+          />
+          <hr />
+          <RecipeList recipes={recipes} />
+        </div>
+      )}
     </div>
   );
 }
