@@ -13,5 +13,5 @@ export function useNotif() {
   async function sendRecipe() {
     socket.emit("recipe.add", "recipe added");
   }
-  return { sendRecipe };
+  return { sendRecipe, receiveRecipe };
 }

@@ -8,6 +8,7 @@ import { useState } from "react";
 import { Header } from "../components/Header.jsx";
 import { Helmet } from "react-helmet-async";
 import { Notification } from "../components/Notification.jsx";
+import { socket } from "../App.jsx";
 import "./Blog.css";
 
 export function Blog() {
@@ -20,6 +21,7 @@ export function Blog() {
   });
   const recipes =
     recipesQuery.data?.recipesByAuthor ?? recipesQuery.data?.recipes ?? [];
+  socket.on("recipe.add", () => setIsOpen(true));
   return (
     <div style={{ padding: 8 }}>
       <Helmet>
