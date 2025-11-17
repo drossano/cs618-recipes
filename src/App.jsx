@@ -8,10 +8,10 @@ import { io } from "socket.io-client";
 
 export const socket = io(import.meta.env.VITE_SOCKET_HOST);
 
-socket.on("connect", () => {
-  console.log("connected to socket.io as", socket.id);
-  socket.emit("recipe.add", "hello from client");
-});
+// socket.on("connect", () => {
+//   console.log("connected to socket.io as", socket.id);
+//   socket.emit("recipe.add", "hello from client");
+// });
 
 socket.on("connect_error", (err) => {
   console.error("socket.io connect error:", err);
