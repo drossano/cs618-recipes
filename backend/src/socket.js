@@ -9,11 +9,7 @@ export function handleSocket(io) {
     socket.on('recipe.add', async () => {
       const recipe = await getNewestRecipe()
       console.log(recipe)
-      socket.broadcast.emit(
-        'recipe.add',
-
-        recipe,
-      )
+      socket.broadcast.emit('recipe.add', recipe)
     })
   })
 }

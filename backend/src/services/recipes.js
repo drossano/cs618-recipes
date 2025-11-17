@@ -38,7 +38,7 @@ export async function getRecipeById(RecipeId) {
   return await Recipe.findById(RecipeId)
 }
 export async function getNewestRecipe() {
-  return await Recipe.findOne().sort({ _id: -1 })
+  return await Recipe.findOne().sort({ createdAt: -1 })
 }
 
 export async function updateRecipe(

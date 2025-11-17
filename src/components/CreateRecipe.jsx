@@ -24,10 +24,10 @@ export function CreateRecipe() {
     refetchQueries: [GET_RECIPES, GET_RECIPES_BY_AUTHOR],
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    createRecipe();
-    sendRecipe();
+    await createRecipe();
+    await sendRecipe();
   };
   if (!token) return <div>Please log in to create new recipes.</div>;
   return (

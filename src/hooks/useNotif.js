@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { socket } from "../App.jsx";
 
 export function useNotif() {
-  function receiveRecipe(recipe) {
+  async function receiveRecipe(recipe) {
     console.log(recipe);
     return recipe;
   }
@@ -10,7 +10,7 @@ export function useNotif() {
     socket.on("recipe.add", receiveRecipe);
     return () => socket.off("recipe.add", receiveRecipe);
   });
-  function sendRecipe() {
+  async function sendRecipe() {
     socket.emit("recipe.add", "recipe added");
   }
   return { sendRecipe };
