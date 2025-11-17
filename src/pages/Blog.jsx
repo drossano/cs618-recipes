@@ -7,9 +7,11 @@ import { RecipeSorting } from "../components/RecipeSorting.jsx";
 import { useState } from "react";
 import { Header } from "../components/Header.jsx";
 import { Helmet } from "react-helmet-async";
+import { Notification } from "../components/Notification.jsx";
 import "./Blog.css";
 
 export function Blog() {
+  const [isOpen, setIsOpen] = useState(false);
   const [author, setAuthor] = useState("");
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortOrder, setSortOrder] = useState("descending");
@@ -45,6 +47,10 @@ export function Blog() {
         onOrderChange={(orderValue) => setSortOrder(orderValue)}
       />
       <hr />
+      <button onClick={() => setIsOpen(true)}>Open Notification</button>
+      <Notification open={isOpen} onClose={() => setIsOpen(false)}>
+        Fancy Notification
+      </Notification>
       <RecipeList recipes={recipes} />
     </div>
   );
