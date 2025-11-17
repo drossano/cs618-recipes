@@ -6,7 +6,7 @@ import { ApolloProvider } from "@apollo/client/react/index.js";
 import { ApolloClient, InMemoryCache } from "@apollo/client/core/index.js";
 import { io } from "socket.io-client";
 
-const socket = io(import.meta.env.VITE_SOCKET_HOST);
+export const socket = io(import.meta.env.VITE_SOCKET_HOST);
 
 socket.on("connect", () => {
   console.log("connected to socket.io as", socket.id);
@@ -17,9 +17,9 @@ socket.on("connect_error", (err) => {
   console.error("socket.io connect error:", err);
 });
 
-socket.on("recipe.add", (recipe) => {
-  console.log(`${recipe.username}: ${recipe.recipe}`);
-});
+// socket.on("recipe.add", (recipe) => {
+//   console.log(recipe);
+// });
 const queryClient = new QueryClient();
 const apolloClient = new ApolloClient({
   uri: import.meta.env.VITE_GRAPHQL_URL,

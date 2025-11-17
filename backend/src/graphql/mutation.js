@@ -35,7 +35,7 @@ export const mutationResolver = {
           },
         )
       }
-      console.log(name)
+
       return await createRecipe(auth.sub, { name, ingredients, steps, image })
     },
     likeRecipe: async (parent, { recipe }, { auth }) => {

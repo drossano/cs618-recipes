@@ -8,8 +8,10 @@ import {
   GET_RECIPES_BY_AUTHOR,
 } from "../api/graphql/recipes.js";
 import { useAuth } from "../contexts/AuthContext.jsx";
+import { useNotif } from "../hooks/useNotif.js";
 
 export function CreateRecipe() {
+  const { sendRecipe } = useNotif();
   const [token] = useAuth();
   const [name, setName] = useState("");
   const [ingredients, setIngredients] = useState("");
@@ -25,6 +27,7 @@ export function CreateRecipe() {
   const handleSubmit = (e) => {
     e.preventDefault();
     createRecipe();
+    sendRecipe();
   };
   if (!token) return <div>Please log in to create new recipes.</div>;
   return (

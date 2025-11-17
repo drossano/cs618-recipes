@@ -13,7 +13,7 @@ export async function createRecipe(
     image,
     likes: 0,
   })
-  console.log(name)
+
   return await recipe.save()
 }
 
@@ -36,6 +36,9 @@ export async function listRecipesByAuthor(authorUsername, options) {
 
 export async function getRecipeById(RecipeId) {
   return await Recipe.findById(RecipeId)
+}
+export async function getNewestRecipe() {
+  return await Recipe.findOne().sort({ _id: -1 })
 }
 
 export async function updateRecipe(
