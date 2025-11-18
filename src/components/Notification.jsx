@@ -1,4 +1,6 @@
 import PropTypes from "prop-types";
+import { Recipe } from "./Recipe.jsx";
+import { Fragment } from "react";
 
 const NOTIF_STYLES = {
   position: "fixed",
@@ -19,7 +21,7 @@ const OVERLAY_STYLES = {
   backgroundColor: "rgba(0,0,0,.7)",
   zIndex: 1000,
 };
-export function Notification({ open, children, onClose }) {
+export function Notification({ open, onClose, recipe }) {
   if (!open) {
     return null;
   }
@@ -29,7 +31,16 @@ export function Notification({ open, children, onClose }) {
       <div style={OVERLAY_STYLES}>
         <div style={NOTIF_STYLES}>
           <button onClick={onClose}>Close Notificaiton</button>
-          {children}
+          <br />
+          New Recipe!
+          <Fragment>
+            <Recipe
+              name={recipe.name}
+              id={recipe._id}
+              likes={recipe.likes}
+              author={recipe._author}
+            />
+          </Fragment>
         </div>
       </div>
     </>
@@ -37,7 +48,7 @@ export function Notification({ open, children, onClose }) {
 }
 
 Notification.propTypes = {
-  children: PropTypes.element.isRequired,
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func,
+  recipe: PropTypes.shape(Recipe.propTypes),
 };

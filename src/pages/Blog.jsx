@@ -9,6 +9,7 @@ import { Header } from "../components/Header.jsx";
 import { Helmet } from "react-helmet-async";
 import { Notification } from "../components/Notification.jsx";
 import { socket } from "../App.jsx";
+import { useNotif } from "../hooks/useNotif.js";
 import "./Blog.css";
 
 export function Blog() {
@@ -16,6 +17,7 @@ export function Blog() {
   const [author, setAuthor] = useState("");
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortOrder, setSortOrder] = useState("descending");
+  const { latestRecipe } = useNotif();
   const recipesQuery = useQuery(author ? GET_RECIPES_BY_AUTHOR : GET_RECIPES, {
     variables: { author, options: { sortBy, sortOrder } },
   });
@@ -50,9 +52,11 @@ export function Blog() {
       />
       <hr />
       <button onClick={() => setIsOpen(true)}>Open Notification</button>
-      <Notification open={isOpen} onClose={() => setIsOpen(false)}>
-        Fancy Notification
-      </Notification>
+      <Notification
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        recipe={latestRecipe}
+      />
       <RecipeList recipes={recipes} />
     </div>
   );
