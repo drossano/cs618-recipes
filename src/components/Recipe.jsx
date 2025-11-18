@@ -13,6 +13,7 @@ export function Recipe({
   image,
   id,
   fullRecipe = false,
+  showLikes = true,
 }) {
   return (
     <article>
@@ -25,9 +26,14 @@ export function Recipe({
           <Link to={`/recipes/${id}/${slug(name)}`}>
             <h3>{name}</h3>
           </Link>
-          <div>
-            <Likes recipeId={id} />
-          </div>
+
+          {showLikes ? (
+            <div>
+              <Likes recipeId={id} />
+            </div>
+          ) : (
+            []
+          )}
           <img src={image} alt="" />
         </div>
       )}
@@ -66,4 +72,5 @@ Recipe.propTypes = {
   image: PropTypes.string,
   id: PropTypes.string.isRequired,
   fullRecipe: PropTypes.bool,
+  showLikes: PropTypes.bool,
 };

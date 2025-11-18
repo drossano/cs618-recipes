@@ -46,6 +46,7 @@ export function Notification({ open, onClose, recipe }) {
               id={recipe._id}
               likes={recipe.likes}
               author={userInfo}
+              showLikes={false}
             />
           </Fragment>
         </div>
