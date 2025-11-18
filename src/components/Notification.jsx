@@ -1,7 +1,8 @@
 import PropTypes from "prop-types";
 import { Recipe } from "./Recipe.jsx";
 import { Fragment } from "react";
-
+import { useQuery } from "@tanstack/react-query";
+import { getUserInfo } from "../api/users.js";
 const NOTIF_STYLES = {
   position: "fixed",
   top: "50%",
@@ -25,6 +26,12 @@ export function Notification({ open, onClose, recipe }) {
   if (!open) {
     return null;
   }
+  const userinfoQuery = useQuery({
+    queryKey: ["users", recipe?.author],
+    queryFn: () => getUserInfo(recipe?.author),
+    enabled: Boolean(recipe?.author),
+  });
+  const userInfo = userinfoQuery.data ?? {};
 
   return (
     <>
@@ -38,7 +45,7 @@ export function Notification({ open, onClose, recipe }) {
               name={recipe.name}
               id={recipe._id}
               likes={recipe.likes}
-              author={recipe._author}
+              author={userInfo}
             />
           </Fragment>
         </div>
